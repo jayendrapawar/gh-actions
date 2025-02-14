@@ -1,5 +1,5 @@
 name: Deploy Project
-on: push
+on: [push, workflow_dispatch]
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -15,7 +15,6 @@ jobs:
       - name: Run Tests
         run: npm test
   deploy:
-    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Get Code on server 
@@ -30,4 +29,21 @@ jobs:
         run: npm run build
       - name: Deploy Project
         run: echo "Deploying....."
+  acceptance-test:
+    needs: [test, deploy]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Code on server 
+        uses: actions/checkout@v3
+      - name: Install NodeJS 
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install dependencies 
+        run: npm ci
+      - name: Build Project 
+        run: npm run build
+      - name: Deploy Project
+        run: echo "Deploying....."
+  
 
