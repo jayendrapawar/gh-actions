@@ -1,0 +1,25 @@
+name: Merge PR to Main
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  merge:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Merge PR into main
+        run: |
+          git fetch origin main
+          git checkout main
+          git merge --ff-only origin/${{ github.event.pull_request.head.ref }}
+          git push origin main
