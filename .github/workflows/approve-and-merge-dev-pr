@@ -5,8 +5,7 @@ on:
       - dev
 jobs:
   auto-approve-and-merge:
-    runs-on: ibm-runners-small
-    if: github.actor == 'CDSCDP-AUTONP'
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/github-script@v7
         with:
